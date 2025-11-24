@@ -19,9 +19,12 @@ const generateId = () => {
 
 const ChatWidget = () => {
   // Inicializar desde sessionStorage (se borra al cerrar pestaña)
+  // Abrir por defecto la primera vez (cuando no hay nada guardado)
   const [open, setOpen] = useState(() => {
     const saved = sessionStorage.getItem('chatWidgetOpen');
-    return saved === 'true';
+    // Si no hay nada guardado, abrir por defecto (primera vez)
+    // Si hay algo guardado, respetar la preferencia del usuario
+    return saved === null ? true : saved === 'true';
   });
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>(() => {
