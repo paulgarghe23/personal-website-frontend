@@ -60,7 +60,7 @@ const ChatWidget = () => {
           id: generateId(),
           role: "assistant",
           content:
-            "Hello! I am Paul's AI agent, you can talk to me if you have a question about Paul's profile and I will answer if I can.\n\nSome examples of questions I can answer:\n• What is Paul doing right now?\n• Tell me about Paul's CV\n• Tell me about Paul's interests\n\nPlease note I am a beta version and don't have all context yet.\nPlease note the first message will take a few seconds to answer as servers are loading.",
+            "Hello there!\nI am Paul's AI agent, you can talk to me if you have a question about Paul's profile and I will do my best to answer.\n\nSome examples of questions I can answer:\n• What is Paul doing right now?\n• Tell me about Paul's CV\n• Tell me about Paul's interests\n\nPlease note I am in beta.",
         },
       ]);
     }
