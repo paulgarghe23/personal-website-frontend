@@ -5,25 +5,32 @@ import { Github } from "lucide-react";
 const Projects = () => {
   const projects = [
     {
+      title: "Paul's AI Web Agent V2",
+      description:
+        "Enhanced AI web agent built with LangGraph, LangChain, and Vertex AI. Deployed on Google Cloud Run with CI/CD pipelines, featuring intelligent Q&A capabilities and contact form integration.",
+      tags: ["Python", "LangGraph", "LangChain", "Vertex AI", "FastAPI", "GCP", "Cloud Run"],
+      github: "https://github.com/paulgarghe23/web-agent-backend-v2-gcp",
+    },
+    {
       title: "Paul's AI Web Agent",
       description:
         "AI-powered web agent built with FastAPI and RAG for intelligent profile and projects Q&A using OpenAI embeddings.",
       tags: ["Python", "FastAPI", "RAG", "OpenAI", "AI"],
-      github: "https://github.com/paulgarghe23/Web-agent",
+      github: "https://github.com/paulgarghe23/web-agent-backend-v1",
     },
     {
       title: "Identity Forge Page",
       description:
         "Personal website built with React, Tailwind and Vercel.",
       tags: ["React", "Vite", "Tailwind", "Vercel"],
-      github: "https://github.com/paulgarghe23/Identity-Forge-Page",
+      github: "https://github.com/paulgarghe23/personal-website-frontend",
     },
     {
       title: "Zepp Data LLM Analysis",
       description:
         "Python-based data pipeline that extracts sleep data from Zepp/Mi Fit, exports it to CSV, and generates weekly AI reports.",
       tags: ["Python", "API", "Automation", "LLM"],
-      github: "https://github.com/paulgarghe23/Zepp-data-LLM-analysis",
+      github: "https://github.com/paulgarghe23/zepp-sleep-llm-analysis",
     },
   ];
 
