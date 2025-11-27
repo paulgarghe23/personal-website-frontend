@@ -68,7 +68,7 @@ const ChatWidget = () => {
 
   const send = async () => {
     const text = input.trim();
-    if (!text) return;
+    if (!text || loading) return;
     setInput("");
     
     const userMsg: Message = { id: generateId(), role: "user", content: text };
@@ -122,7 +122,7 @@ const ChatWidget = () => {
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !loading) {
       e.preventDefault();
       send();
     }
