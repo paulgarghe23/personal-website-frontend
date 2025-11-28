@@ -59,8 +59,16 @@ const ChatWidget = () => {
         {
           id: generateId(),
           role: "assistant",
-          content:
-            "Hello there!\nI am Paul's AI agent, you can talk to me if you have a question about Paul's profile and I will do my best to answer.\n\nSome examples of questions I can answer:\n• What is Paul doing right now?\n• Tell me about Paul's CV\n• Tell me about Paul's interests\n\nPlease note I am in beta.",
+          content: `Hello there!
+I am Paul's AI agent, you can talk to me if you have a question about Paul's profile and I will do my best to answer.
+I can also help you contact Paul directly — just let me know if you'd like to send him a message!
+
+Some examples of questions I can answer:
+• What is Paul doing right now?
+• Tell me about Paul's CV
+• Tell me about Paul's interests
+
+Please note I am in beta.`,
         },
       ]);
     }
