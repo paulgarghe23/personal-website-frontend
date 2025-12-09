@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG System - Functional Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px;
+            max-width: 1200px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+        }
+
+        .flow-diagram {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .flow-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .flow-horizontal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .flow-node {
+            position: relative;
+            text-align: center;
+        }
+
+        .flow-node-box {
+            width: 280px;
+            min-height: 120px;
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease;
+        }
+
+        .flow-node-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .flow-node-box.documents {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .flow-node-box.processing {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .flow-node-box.embedding {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .flow-node-box.storage {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .flow-node-box.query {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .flow-node-box.search {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .flow-node-box.synthesis {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #1a1a1a;
+        }
+
+        .flow-node-box.response {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #1a1a1a;
+        }
+
+        .flow-node-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .flow-node-label {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .flow-node-desc {
+            font-size: 13px;
+            opacity: 0.95;
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .flow-node-details {
+            font-size: 11px;
+            opacity: 0.85;
+            font-weight: 300;
+            text-align: center;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .arrow-down {
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #764ba2;
+        }
+
+        .arrow-horizontal {
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .arrow-horizontal::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid #764ba2;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #667eea 50%, transparent 100%);
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .flow-horizontal {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow-horizontal {
+                width: 3px;
+                height: 40px;
+            }
+
+            .arrow-horizontal::after {
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-top: 12px solid #764ba2;
+                border-left: none;
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="header-icon">🔍</span>
+                RAG System - Functional Diagram
+            </h1>
+            <p>Retrieval-Augmented Generation - Complete Flow</p>
+        </div>
+
+        <!-- Phase 1: Document Ingestion (Offline) -->
+        <div class="section">
+            <div class="section-title">📚 Phase 1: Document Ingestion (Offline/Initialization)</div>
+            
+            <div class="flow-diagram">
+                <div class="flow-vertical">
+                    <div class="flow-node">
+                        <div class="flow-node-box documents">
+                            <div class="flow-node-icon">📄</div>
+                            <div class="flow-node-label">Document Loading</div>
+                            <div class="flow-node-desc">Load documents from local or GCS</div>
+                            <div class="flow-node-details">PDF, Markdown, XLSX</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box processing">
+                            <div class="flow-node-icon">✂️</div>
+                            <div class="flow-node-label">Text Splitting</div>
+                            <div class="flow-node-desc">Split into chunks</div>
+                            <div class="flow-node-details">Chunk size: 1000 chars<br>Overlap: 200 chars</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box embedding">
+                            <div class="flow-node-icon">🧮</div>
+                            <div class="flow-node-label">Embedding Generation</div>
+                            <div class="flow-node-desc">VertexAI Embeddings</div>
+                            <div class="flow-node-details">Model: text-embedding-004<br>Dimension: 768</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box storage">
+                            <div class="flow-node-icon">💾</div>
+                            <div class="flow-node-label">Vector Store</div>
+                            <div class="flow-node-desc">FAISS Index</div>
+                            <div class="flow-node-details">Stores all document chunks<br>as vectors</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Phase 2: Query Processing (Online) -->
+        <div class="section">
+            <div class="section-title">🔎 Phase 2: Query Processing (Online)</div>
+            
+            <div class="flow-diagram">
+                <div class="flow-vertical">
+                    <div class="flow-node">
+                        <div class="flow-node-box query">
+                            <div class="flow-node-icon">💬</div>
+                            <div class="flow-node-label">User Query</div>
+                            <div class="flow-node-desc">Question about Paul</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box embedding">
+                            <div class="flow-node-icon">🧮</div>
+                            <div class="flow-node-label">Query Embedding</div>
+                            <div class="flow-node-desc">Same embedding model</div>
+                            <div class="flow-node-details">text-embedding-004</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box search">
+                            <div class="flow-node-icon">🔍</div>
+                            <div class="flow-node-label">Similarity Search</div>
+                            <div class="flow-node-desc">FAISS vector search</div>
+                            <div class="flow-node-details">Top-k: 3 results<br>Max distance: 1.2</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-horizontal">
+                        <div class="flow-node">
+                            <div class="flow-node-box processing">
+                                <div class="flow-node-icon">🧹</div>
+                                <div class="flow-node-label">Filter & Clean</div>
+                                <div class="flow-node-desc">Filter by threshold</div>
+                                <div class="flow-node-details">Remove markdown headers</div>
+                            </div>
+                        </div>
+                        <div class="arrow-horizontal"></div>
+                        <div class="flow-node">
+                            <div class="flow-node-box processing">
+                                <div class="flow-node-icon">📋</div>
+                                <div class="flow-node-label">Context Assembly</div>
+                                <div class="flow-node-desc">Combine chunks</div>
+                                <div class="flow-node-details">Join with "\n\n"</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box synthesis">
+                            <div class="flow-node-icon">🤖</div>
+                            <div class="flow-node-label">LLM Synthesis</div>
+                            <div class="flow-node-desc">Gemini 2.5 Flash</div>
+                            <div class="flow-node-details">System prompt + Context + Query</div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"></div>
+                    <div class="flow-node">
+                        <div class="flow-node-box response">
+                            <div class="flow-node-icon">✅</div>
+                            <div class="flow-node-label">Synthesized Answer</div>
+                            <div class="flow-node-desc">Natural language response</div>
+                            <div class="flow-node-details">2-4 sentences<br>In user's language</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Technical Details -->
+        <div class="section">
+            <div class="section-title">⚙️ Technical Details</div>
+            
+            <div class="two-column">
+                <div class="info-box">
+                    <h3>Embedding Model</h3>
+                    <ul>
+                        <li>VertexAI Embeddings</li>
+                        <li>Model: text-embedding-004</li>
+                        <li>Dimension: 768</li>
+                        <li>Location: europe-west1</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Vector Store</h3>
+                    <ul>
+                        <li>FAISS (Facebook AI Similarity Search)</li>
+                        <li>In-memory index</li>
+                        <li>Lazy initialization</li>
+                        <li>Singleton pattern</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>LLM Model</h3>
+                    <ul>
+                        <li>Vertex AI Gemini 2.5 Flash</li>
+                        <li>Temperature: 0.2</li>
+                        <li>Max tokens: 10,000</li>
+                        <li>System prompt for synthesis</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Search Parameters</h3>
+                    <ul>
+                        <li>Top-k: 3 chunks</li>
+                        <li>Max distance: 1.2</li>
+                        <li>Fallback: Use best result if none pass threshold</li>
+                        <li>Chunk size: 1000 chars</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Key Features -->
+        <div class="section">
+            <div class="section-title">✨ Key Features</div>
+            
+            <div class="two-column">
+                <div class="info-box">
+                    <h3>Retrieval Phase</h3>
+                    <ul>
+                        <li>Semantic similarity search</li>
+                        <li>Distance-based filtering</li>
+                        <li>Top-k retrieval strategy</li>
+                        <li>Automatic fallback mechanism</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Generation Phase</h3>
+                    <ul>
+                        <li>Context-aware synthesis</li>
+                        <li>No verbatim copying</li>
+                        <li>Multilingual support</li>
+                        <li>Concise answers (2-4 sentences)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
