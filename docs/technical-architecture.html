@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Website - Technical Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .tech-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .tech-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tech-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tech-list li {
+            font-size: 14px;
+            color: #555;
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tech-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .diagram-layer {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .layer-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .layer-components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .component-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .detail-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .detail-box h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .detail-box p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .code-snippet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .code-snippet code {
+            color: #9cdcfe;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .infrastructure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .infra-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .infra-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .infra-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .infra-card p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .tech-grid,
+            .infrastructure-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="header-icon">🏗️</span>
+                Technical Architecture
+            </h1>
+            <p>Complete Architecture - All Components</p>
+        </div>
+
+        <!-- Frontend Stack -->
+        <div class="section">
+            <div class="section-title">⚛️ Frontend Stack</div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Core Framework</h3>
+                    <ul class="tech-list">
+                        <li>React 18.3.1</li>
+                        <li>TypeScript 5.8.3</li>
+                        <li>Vite 5.4.19</li>
+                        <li>React Router DOM 6.30.1</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>UI & Styling</h3>
+                    <ul class="tech-list">
+                        <li>Tailwind CSS 3.4.17</li>
+                        <li>shadcn/ui Components</li>
+                        <li>Radix UI Primitives</li>
+                        <li>Lucide React Icons</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>State & Data</h3>
+                    <ul class="tech-list">
+                        <li>React Hooks</li>
+                        <li>SessionStorage</li>
+                        <li>TanStack Query 5.83.0</li>
+                        <li>Server-Sent Events (SSE)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="detail-box">
+                <h4>Frontend Architecture</h4>
+                <p><strong>Estructura:</strong> Componentes modulares con separación de concerns. ChatWidget maneja el estado local y comunicación con API.</p>
+                <p><strong>Build:</strong> Vite para desarrollo rápido y builds optimizados. Hot Module Replacement (HMR) en desarrollo.</p>
+                <p><strong>Deployment:</strong> Vercel con dominio personalizado (paulgarghe.com). Build automático en cada push a main.</p>
+            </div>
+        </div>
+
+        <!-- Backend Stack -->
+        <div class="section">
+            <div class="section-title">🚀 Backend Stack</div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>API Framework</h3>
+                    <ul class="tech-list">
+                        <li>FastAPI</li>
+                        <li>Python 3.11+</li>
+                        <li>Uvicorn ASGI Server</li>
+                        <li>CORS Middleware</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>AI & ML</h3>
+                    <ul class="tech-list">
+                        <li>LangGraph (ReAct Agent)</li>
+                        <li>LangChain Core</li>
+                        <li>Vertex AI (Gemini 2.5 Flash)</li>
+                        <li>Vertex AI Embeddings (text-embedding-004)</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>RAG System</h3>
+                    <ul class="tech-list">
+                        <li>FAISS Vector Store</li>
+                        <li>Character Text Splitter</li>
+                        <li>Chunk size: 1000, Overlap: 200</li>
+                        <li>Similarity search (k=3, threshold=1.2)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="detail-box">
+                <h4>Backend Architecture</h4>
+                <p><strong>Agent Pattern:</strong> ReAct (Reasoning + Acting) con LangGraph. El agente decide qué herramienta usar basándose en el contexto.</p>
+                <p><strong>Tools:</strong> Dos herramientas principales: <span class="highlight">get_paul_info</span> (RAG search) y <span class="highlight">send_contact_form</span> (form submission).</p>
+                <p><strong>Streaming:</strong> Server-Sent Events (SSE) para respuestas en tiempo real. Formato JSON lines con chunks progresivos.</p>
+            </div>
+        </div>
+
+        <!-- Infrastructure -->
+        <div class="section">
+            <div class="section-title">☁️ Infrastructure & Deployment</div>
+            <div class="infrastructure-grid">
+                <div class="infra-card">
+                    <h4>Frontend Hosting</h4>
+                    <p><strong>Platform:</strong> Vercel</p>
+                    <p><strong>Domain:</strong> paulgarghe.com</p>
+                    <p><strong>CDN:</strong> Global edge network</p>
+                    <p><strong>CI/CD:</strong> Auto-deploy on git push</p>
+                </div>
+                <div class="infra-card">
+                    <h4>Backend Hosting</h4>
+                    <p><strong>Platform:</strong> Google Cloud Run</p>
+                    <p><strong>Domain:</strong> agent.paulgarghe.com</p>
+                    <p><strong>Scaling:</strong> Auto-scaling (0 to N instances)</p>
+                    <p><strong>Container:</strong> Docker-based</p>
+                </div>
+                <div class="infra-card">
+                    <h4>Infrastructure as Code</h4>
+                    <p><strong>Tool:</strong> Terraform</p>
+                    <p><strong>Environments:</strong> Dev & Production</p>
+                    <p><strong>Resources:</strong> Cloud Run, IAM, Storage</p>
+                    <p><strong>CI/CD:</strong> Cloud Build / GitHub Actions</p>
+                </div>
+                <div class="infra-card">
+                    <h4>Vector Store</h4>
+                    <p><strong>Storage:</strong> FAISS (in-memory)</p>
+                    <p><strong>Embeddings:</strong> Vertex AI (768 dims)</p>
+                    <p><strong>Documents:</strong> CV, context.md, work stories</p>
+                    <p><strong>Initialization:</strong> Lazy loading on first request</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Observability -->
+        <div class="section">
+            <div class="section-title">📊 Observability & Monitoring</div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Logging</h3>
+                    <ul class="tech-list">
+                        <li>Google Cloud Logging (Production)</li>
+                        <li>Structured JSON logs</li>
+                        <li>Console logging (Local dev)</li>
+                        <li>Detailed formatter with context</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>Tracing</h3>
+                    <ul class="tech-list">
+                        <li>OpenTelemetry</li>
+                        <li>Traceloop SDK</li>
+                        <li>Cloud Trace integration</li>
+                        <li>LangChain instrumentation</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>Metrics</h3>
+                    <ul class="tech-list">
+                        <li>Request/Response times</li>
+                        <li>RAG search performance</li>
+                        <li>LLM call metrics</li>
+                        <li>Tool execution tracking</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="detail-box">
+                <h4>Logging Strategy</h4>
+                <p><strong>Structured Logging:</strong> Todos los eventos incluyen metadata estructurada (event, query, timestamps, etc.)</p>
+                <p><strong>Key Events:</strong> Request received, RAG search, LLM calls, tool execution, response generation, errors</p>
+                <p><strong>Performance Tracking:</strong> Tiempos de RAG, LLM, y total de request medidos y logueados</p>
+            </div>
+        </div>
+
+        <!-- Data Flow Architecture -->
+        <div class="section">
+            <div class="section-title">🔄 Complete Data Flow</div>
+            <div class="architecture-diagram">
+                <div class="diagram-layer">
+                    <div class="layer-title">🌐 Presentation Layer</div>
+                    <div class="layer-components">
+                        <span class="component-badge">React Components</span>
+                        <span class="component-badge">ChatWidget</span>
+                        <span class="component-badge">SessionStorage</span>
+                        <span class="component-badge">SSE Client</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="layer-title">🚀 API Layer</div>
+                    <div class="layer-components">
+                        <span class="component-badge">FastAPI Server</span>
+                        <span class="component-badge">CORS Middleware</span>
+                        <span class="component-badge">Request Validation</span>
+                        <span class="component-badge">Streaming Response</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="layer-title">🤖 Agent Layer</div>
+                    <div class="layer-components">
+                        <span class="component-badge">LangGraph Agent</span>
+                        <span class="component-badge">ReAct Pattern</span>
+                        <span class="component-badge">Tool Selection</span>
+                        <span class="component-badge">State Management</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="layer-title">🔍 RAG Layer</div>
+                    <div class="layer-components">
+                        <span class="component-badge">Vector Store (FAISS)</span>
+                        <span class="component-badge">Embeddings (Vertex AI)</span>
+                        <span class="component-badge">Similarity Search</span>
+                        <span class="component-badge">Context Retrieval</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="layer-title">🧠 LLM Layer</div>
+                    <div class="layer-components">
+                        <span class="component-badge">Vertex AI Client</span>
+                        <span class="component-badge">Gemini 2.5 Flash</span>
+                        <span class="component-badge">Response Synthesis</span>
+                        <span class="component-badge">Multilingual Support</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="layer-title">📊 Observability Layer</div>
+                    <div class="layer-components">
+                        <span class="component-badge">Cloud Logging</span>
+                        <span class="component-badge">Cloud Trace</span>
+                        <span class="component-badge">Traceloop</span>
+                        <span class="component-badge">Structured Events</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration Details -->
+        <div class="section">
+            <div class="section-title">⚙️ Configuration & Environment</div>
+            <div class="detail-box">
+                <h4>Environment Variables</h4>
+                <div class="code-snippet">
+<code>GOOGLE_CLOUD_PROJECT=your-project-id
+GOOGLE_CLOUD_LOCATION=europe-west1
+K_SERVICE=web-agent (Cloud Run)
+COMMIT_SHA=git-commit-hash</code>
+                </div>
+            </div>
+            <div class="detail-box">
+                <h4>LLM Configuration</h4>
+                <p><strong>Model:</strong> gemini-2.5-flash</p>
+                <p><strong>Temperature:</strong> 0.2 (para respuestas consistentes)</p>
+                <p><strong>Max Tokens:</strong> 10,000</p>
+                <p><strong>Location:</strong> europe-west1</p>
+            </div>
+            <div class="detail-box">
+                <h4>RAG Configuration</h4>
+                <p><strong>Embedding Model:</strong> text-embedding-004 (768 dimensions)</p>
+                <p><strong>Chunk Size:</strong> 1000 characters</p>
+                <p><strong>Chunk Overlap:</strong> 200 characters</p>
+                <p><strong>Top-K:</strong> 3 resultados</p>
+                <p><strong>Distance Threshold:</strong> 1.2 (máxima distancia de similitud)</p>
+            </div>
+        </div>
+
+        <!-- Security & Best Practices -->
+        <div class="section">
+            <div class="section-title">🔒 Security & Best Practices</div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Security</h3>
+                    <ul class="tech-list">
+                        <li>CORS configurado por dominio</li>
+                        <li>Google Cloud IAM</li>
+                        <li>Service accounts</li>
+                        <li>Environment variables</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>Error Handling</h3>
+                    <ul class="tech-list">
+                        <li>Try-catch en todos los niveles</li>
+                        <li>Error logging estructurado</li>
+                        <li>User-friendly error messages</li>
+                        <li>Graceful degradation</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h3>Performance</h3>
+                    <ul class="tech-list">
+                        <li>Lazy loading de vector store</li>
+                        <li>Streaming responses</li>
+                        <li>Connection pooling</li>
+                        <li>Auto-scaling en Cloud Run</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
