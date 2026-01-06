@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Github, PanelRightOpen } from "lucide-react";
 
 const Projects = () => {
   const projects = [
@@ -10,6 +11,8 @@ const Projects = () => {
         "Enhanced AI web agent built with LangGraph, LangChain, and Vertex AI. Deployed on Google Cloud Run with CI/CD pipelines, featuring intelligent Q&A capabilities and contact form integration.",
       tags: ["Python", "LangGraph", "LangChain", "Vertex AI", "FastAPI", "GCP", "Cloud Run"],
       github: "https://github.com/paulgarghe23/web-agent-backend-v2-gcp",
+      diagramUrl: "/docs/functional-architecture.html",
+      diagramLabel: "Functional Diagram",
     },
     {
       title: "Paul's AI Web Agent",
@@ -73,16 +76,50 @@ const Projects = () => {
                   ))}
                 </div>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-2 hover:bg-accent/10"
-                  asChild
-                >
-                  <a href={project.github} target="_blank" rel="noopener noreferrer">
-                    <Github size={16} /> View Project
-                  </a>
-                </Button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 hover:bg-accent/10"
+                    asChild
+                  >
+                    <a href={project.github} target="_blank" rel="noopener noreferrer">
+                      <Github size={16} /> View Project
+                    </a>
+                  </Button>
+
+                  {project.diagramUrl && (
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <Button size="sm" variant="outline" className="gap-2 hover:bg-accent/10">
+                          <PanelRightOpen size={16} /> {project.diagramLabel || "View Diagram"}
+                        </Button>
+                      </SheetTrigger>
+                      <SheetContent
+                        side="right"
+                        className="w-full sm:max-w-5xl p-0 border-l bg-card flex flex-col"
+                        aria-label={project.diagramLabel || "Diagram"}
+                      >
+                        <div className="flex items-center justify-between border-b px-6 py-4">
+                          <div>
+                            <p className="text-xs uppercase tracking-wide text-muted-foreground">Diagram</p>
+                            <p className="text-base font-semibold text-foreground">{project.title}</p>
+                          </div>
+                        </div>
+                        <div className="flex-1 bg-muted flex justify-center items-start">
+                          <div className="h-[90vh] w-full max-w-[1400px] overflow-auto px-2 py-2">
+                            <iframe
+                              src={project.diagramUrl}
+                              title={project.diagramLabel || "Functional diagram"}
+                              className="h-full w-full border-0 scale-[0.88] origin-top"
+                              loading="lazy"
+                            />
+                          </div>
+                        </div>
+                      </SheetContent>
+                    </Sheet>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
