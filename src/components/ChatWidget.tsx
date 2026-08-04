@@ -10,23 +10,25 @@ interface Message {
   content: string;
 }
 
-const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+// Matches full URLs (https://...) and bare domains (paulgarghe.com, linkedin.com/in/paul-ig/)
+const URL_REGEX = /((?:https?:\/\/)?(?:[a-zA-Z0-9-]+\.)+(?:com|edu|org|net|io|dev)(?:\/[^\s]*)?)/g;
 
 const linkify = (text: string) => {
   const parts = text.split(URL_REGEX);
   return parts.map((part, i) => {
     if (!part.match(URL_REGEX)) return part;
     const trailingPunct = part.match(/[.,;:)]+$/)?.[0] ?? "";
-    const url = trailingPunct ? part.slice(0, -trailingPunct.length) : part;
+    const displayText = trailingPunct ? part.slice(0, -trailingPunct.length) : part;
+    const href = displayText.startsWith("http") ? displayText : `https://${displayText}`;
     return (
       <span key={i}>
         <a
-          href={url}
+          href={href}
           target="_blank"
           rel="noopener noreferrer"
           className="underline underline-offset-2 hover:opacity-80"
         >
-          {url}
+          {displayText}
         </a>
         {trailingPunct}
       </span>
