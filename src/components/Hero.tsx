@@ -23,7 +23,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="animate-fade-in max-w-4xl mx-auto">
           <h1 className="text-6xl md:text-8xl font-serif font-semibold text-foreground mb-8 leading-tight tracking-tight">
-            Engineering <span className="text-accent">Clarity</span>
+            AI Agents, <span className="text-accent">Built to Trust</span>
           </h1>
           <p className="text-lg md:text-xl text-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
             Every action Matters
