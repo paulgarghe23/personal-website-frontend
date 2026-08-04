@@ -1,10 +1,23 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Github, PanelRightOpen } from "lucide-react";
+import { Github, PanelRightOpen, Lock, ExternalLink } from "lucide-react";
 
 const Projects = () => {
   const projects = [
+    {
+      title: "Camilo Assistant (SEK Education Group)",
+      description:
+        "Multilingual RAG chatbot answering FAQs for thousands of university students. Uses hybrid retrieval (cosine similarity + BM25) and Azure OpenAI (GPT-4o), deployed on Azure Container Apps with CI/CD.",
+      tags: ["Python", "FastAPI", "RAG", "Hybrid Search", "Azure OpenAI", "Azure Container Apps"],
+      liveUrl: "https://camiloassistant.ucjc.edu",
+    },
+    {
+      title: "Curriculum Planner Agent (SEK Education Group)",
+      description:
+        "LangGraph conversational agent that co-creates curriculum unit planners with teachers, backed by RAG over pedagogical documentation. Private project, in development.",
+      tags: ["Python", "LangGraph", "RAG", "Azure"],
+    },
     {
       title: "Paul's AI Web Agent V2",
       description:
@@ -77,16 +90,35 @@ const Projects = () => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-2 hover:bg-accent/10"
-                    asChild
-                  >
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github size={16} /> View Project
-                    </a>
-                  </Button>
+                  {project.github ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2 hover:bg-accent/10"
+                      asChild
+                    >
+                      <a href={project.github} target="_blank" rel="noopener noreferrer">
+                        <Github size={16} /> View Project
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button variant="outline" size="sm" className="gap-2" disabled>
+                      <Lock size={16} /> Private Project
+                    </Button>
+                  )}
+
+                  {project.liveUrl && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2 hover:bg-accent/10"
+                      asChild
+                    >
+                      <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink size={16} /> View Live
+                      </a>
+                    </Button>
+                  )}
 
                   {project.diagramUrl && (
                     <Sheet>
