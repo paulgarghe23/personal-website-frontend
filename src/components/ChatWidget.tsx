@@ -184,10 +184,10 @@ Please note I am in beta.`,
       </button>
 
       {open && (
-        <Card className="fixed bottom-24 right-6 z-50 w-80 max-h-[70vh] flex flex-col shadow-2xl border-border">
+        <Card className="fixed bottom-24 right-6 z-50 w-[28rem] max-w-[calc(100vw-3rem)] max-h-[85vh] flex flex-col shadow-2xl border-border">
           <div className="p-3 border-b text-sm font-semibold">Paul's AI Agent</div>
 
-          <div className="p-3 space-y-2 overflow-y-auto" style={{ maxHeight: "50vh" }}>
+          <div className="p-3 space-y-2 overflow-y-auto" style={{ maxHeight: "65vh" }}>
             {messages.length === 0 && (
               <div className="text-xs text-muted-foreground">Empieza la conversación...</div>
             )}
