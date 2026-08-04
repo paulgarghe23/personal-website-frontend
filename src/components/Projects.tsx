@@ -8,14 +8,14 @@ const Projects = () => {
     {
       title: "Camilo Assistant (SEK Education Group)",
       description:
-        "Multilingual RAG chatbot answering FAQs for thousands of university students. Uses hybrid retrieval (cosine similarity + BM25) and Azure OpenAI (GPT-4o), deployed on Azure Container Apps with CI/CD.",
+        "Multilingual RAG chatbot answering FAQs for thousands of university students. Uses hybrid retrieval (cosine similarity + BM25) and Azure OpenAI, deployed on Azure Container Apps with CI/CD.",
       tags: ["Python", "FastAPI", "RAG", "Hybrid Search", "Azure OpenAI", "Azure Container Apps"],
       liveUrl: "https://camiloassistant.ucjc.edu",
     },
     {
       title: "Curriculum Planner Agent (SEK Education Group)",
       description:
-        "LangGraph conversational agent that co-creates curriculum unit planners with teachers, backed by RAG over pedagogical documentation. Private project, in development.",
+        "LangGraph conversational agent that co-creates curriculum unit planners with teachers, backed by RAG over pedagogical documentation.",
       tags: ["Python", "LangGraph", "RAG", "Azure"],
     },
     {
