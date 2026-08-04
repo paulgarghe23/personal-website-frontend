@@ -10,6 +10,30 @@ interface Message {
   content: string;
 }
 
+const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+
+const linkify = (text: string) => {
+  const parts = text.split(URL_REGEX);
+  return parts.map((part, i) => {
+    if (!part.match(URL_REGEX)) return part;
+    const trailingPunct = part.match(/[.,;:)]+$/)?.[0] ?? "";
+    const url = trailingPunct ? part.slice(0, -trailingPunct.length) : part;
+    return (
+      <span key={i}>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:opacity-80"
+        >
+          {url}
+        </a>
+        {trailingPunct}
+      </span>
+    );
+  });
+};
+
 const generateId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
@@ -174,7 +198,7 @@ Please note I am in beta.`,
                     : "bg-muted rounded-lg px-3 py-2 text-xs mr-8"
                 }
               >
-                <div className="whitespace-pre-wrap">{m.content}</div>
+                <div className="whitespace-pre-wrap">{linkify(m.content)}</div>
               </div>
             ))}
             <div ref={endRef} />
