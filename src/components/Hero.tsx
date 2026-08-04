@@ -26,7 +26,7 @@ const Hero = () => {
             AI Agents, <span className="text-accent">Built to Trust</span>
           </h1>
           <p className="text-lg md:text-xl text-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-            Every action Matters
+            AI Engineer building production agents that multiply your impact
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <Button
