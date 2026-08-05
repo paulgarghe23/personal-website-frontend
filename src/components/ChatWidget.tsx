@@ -94,7 +94,7 @@ Some examples of questions I can answer:
 • Tell me about Paul's CV
 • Tell me about Paul's interests
 
-Please note I am in beta.`,
+Please note my first reply may take a few seconds to load.`,
         },
       ]);
     }
