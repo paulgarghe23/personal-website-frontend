@@ -108,7 +108,13 @@ Please note my first reply may take a few seconds to load.`,
     const userMsg: Message = { id: generateId(), role: "user", content: text };
     setMessages((m) => [...m, userMsg]);
     setLoading(true);
-    
+
+    // Burbuja vacía del asistente para mostrar mientras llega el stream -
+    // declarada fuera del try para poder rellenarla también si falla.
+    const assistantMsgId = generateId();
+    let assistantContent = "";
+    setMessages((m) => [...m, { id: assistantMsgId, role: "assistant", content: "" }]);
+
     try {
       // Convertir mensajes al formato de la API
       // Excluir el mensaje inicial del sistema si es el primer mensaje del asistente
@@ -118,16 +124,10 @@ Please note my first reply may take a few seconds to load.`,
           type: m.role === "user" ? "human" : "ai",
           content: m.content,
         }));
-      
+
       // Agregar el nuevo mensaje del usuario
       apiMessages.push({ type: "human", content: text });
-      
-      // Crear mensaje vacío del asistente para mostrar mientras llega el stream
-      const assistantMsgId = generateId();
-      let assistantContent = "";
-      
-      setMessages((m) => [...m, { id: assistantMsgId, role: "assistant", content: "" }]);
-      
+
       // Stream de mensajes
       await streamMessages(
         apiMessages,
@@ -144,12 +144,16 @@ Please note my first reply may take a few seconds to load.`,
         }
       );
     } catch (e) {
-      const errMsg: Message = { 
-        id: generateId(), 
-        role: "assistant", 
-        content: "Error conectando con el agente." 
-      };
-      setMessages((m) => [...m, errMsg]);
+      const status = (e as { status?: number })?.status;
+      const content =
+        status === 429
+          ? "Estás enviando mensajes demasiado rápido. Espera un momento e inténtalo de nuevo."
+          : status === 422
+          ? "Tu mensaje es demasiado largo. Acórtalo un poco e inténtalo de nuevo."
+          : "Error conectando con el agente.";
+      setMessages((m) =>
+        m.map((msg) => (msg.id === assistantMsgId ? { ...msg, content } : msg))
+      );
     } finally {
       setLoading(false);
     }

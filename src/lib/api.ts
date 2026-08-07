@@ -56,7 +56,9 @@ export const streamMessages = async (
     });
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
+      const err = new Error(`Error: ${response.status}`) as Error & { status: number };
+      err.status = response.status;
+      throw err;
     }
 
     const reader = response.body?.getReader();
